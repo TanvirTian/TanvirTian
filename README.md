@@ -28,7 +28,6 @@
 <img src="https://skillicons.dev/icons?i=go,python,java,c,cpp,js,haxe,ruby,git,linux,bash,mysql,postgresql"/>
 
 ---
-### 🛠️ Reverse Engineering & Cybersecurity Tools
 
 ### 🛠️ Reverse Engineering & Cybersecurity Tools
 
