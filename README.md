@@ -14,9 +14,8 @@
 - 💻 Passionate about building efficient systems, and learning how things work under the hood  
 ---
 
-### ⚔️ Currently Working
+### ⚔️ Current Focus
 
-- 📘 Reading: `OSTEP` (Operating Systems) and `Go101`  
 - 🧠 Learning: Low-level concepts like memory, processes, threads, and Go internals  
 - 🔧 Building: Backend projects with Go while exploring OS design and systems thinking  
 - 🎯 Goal: Deep understanding of systems programming to become a solid  backend engineer
@@ -25,7 +24,7 @@
 
 ### 🛠️ Tech Stack & Tools
 
-<img src="https://skillicons.dev/icons?i=go,python,java,c,cpp,js,haxe,ruby,git,linux,bash,mysql,postgresql"/>
+<img src="https://skillicons.dev/icons?i=go,python,java,c,cpp,js,haxe,ruby,git,linux,bash,mysql,postgresql,postman"/>
 
 ---
 
@@ -38,8 +37,9 @@
 
 ### 🖥️ Projects I'm working on
 
-- 📦 Go API for a product archive (REST)  
+- 📦 Go API for Product Archive (REST) – backend API to manage and serve product data efficiently
 
+- 📦 Go Interpreter Series – building a mini interpreter in Go, parsing and executing code while exploring the inner workings of programming languages.
 
 ---
 
