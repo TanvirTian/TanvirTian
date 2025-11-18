@@ -22,30 +22,20 @@
 
 ---
 
-### 🛠️ Tech Stack & Tools
+### 🛠️ Technologies I'm currently using
 
-<img src="https://skillicons.dev/icons?i=go,python,java,c,cpp,js,haxe,ruby,git,linux,bash,mysql,postgresql,postman"/>
+<img src="https://skillicons.dev/icons?i=go,python,rust"/>
 
 ---
-
-### 🛠️ Reverse Engineering & Cybersecurity Tools
-
-![Ghidra](https://img.shields.io/badge/-Ghidra-red?logo=ghidra&logoColor=white&style=for-the-badge) ![Radare2](https://img.shields.io/badge/-Radare2-black?style=for-the-badge) ![IDA Free](https://img.shields.io/badge/-IDA_Pro-darkred?style=for-the-badge) ![GDB](https://img.shields.io/badge/-GDB-blue?style=for-the-badge) ![strace](https://img.shields.io/badge/-strace-grey?style=for-the-badge) ![ltrace](https://img.shields.io/badge/-ltrace-grey?style=for-the-badge)  ![strings](https://img.shields.io/badge/-strings-lightgrey?style=for-the-badge)    ![Wireshark](https://img.shields.io/badge/-Wireshark-blue?logo=wireshark&logoColor=white&style=for-the-badge) ![Burp Suite](https://img.shields.io/badge/-Burp_Suite-darkorange?logo=portswigger&logoColor=white&style=for-the-badge) ![Metasploit](https://img.shields.io/badge/-Metasploit-red?style=for-the-badge) ![Nmap](https://img.shields.io/badge/-Nmap-informational?style=for-the-badge) 
 
 
 
 
 ### 🖥️ Projects I'm working on
 
-- 📦 Go API for Product Archive (REST) – backend API to manage and serve product data efficiently
+- 📦 Shrutik – Open-Source Voice Platform: a web app for collecting and managing diverse voice data to help build better speech-driven systems.
 
 - 📦 Go Interpreter Series – building a mini interpreter in Go, parsing and executing code while exploring the inner workings of programming languages.
 
----
 
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=tanvirtian&label=Profile%20Views&color=brightgreen&style=flat" />
-</p>
-
-> ⚡ “Consistency builds skills. Skills build confidence.”
 
