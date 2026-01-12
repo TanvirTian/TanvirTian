@@ -24,7 +24,7 @@
 
 ### 🛠️ Technologies I'm currently using
 
-<img src="https://skillicons.dev/icons?i=go,python,rust"/>
+<img src="https://skillicons.dev/icons?i=go,python,rust,docker,postgresql,redis"/>
 
 ---
 
