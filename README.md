@@ -21,7 +21,7 @@ Still learning, still experimenting, still breaking things.
 
 ## All contributions at a glance
 
-| # | Severity | Title | Area |
+| PR | Severity | Title | Area |
 |---|---|---|---|
 | [#2222](https://github.com/oras-project/oras/pull/2222) | 🔴 HIGH | Limit manifest config fetch size | Security / resource exhaustion |
 | [#2218](https://github.com/oras-project/oras/pull/2218) | 🔴 HIGH | Detect credentials in multiple JSON values | Security / credential redaction |
