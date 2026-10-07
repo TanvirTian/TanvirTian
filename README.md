@@ -37,7 +37,7 @@ Still learning, still experimenting, still breaking things.
 | [#2199](https://github.com/oras-project/oras/pull/2199) | 🟢 LOW | Replace `action-publish` with Snapcraft CLI | CI / release infra |
 | [#223](https://github.com/vlang/vinix/pull/223) | 🟢 LOW | Fix AArch64 QEMU `mktemp` template | Build environment |
 | [#221](https://github.com/vlang/vinix/pull/221) | 🟢 LOW | Disable backtrace for musl desktop | Runtime config |
-| [#278](https://github.com/checkpoint-restore/go-criu/pull/278) |⚪ MAINTENANCE | Fix typos and grammar | Code quality |
+| [#278](https://github.com/checkpoint-restore/go-criu/pull/278) |⚪MAINTENANCE | Fix typos and grammar | Code quality |
 
 ---
 ## 🔴 HIGH-impact fixes
