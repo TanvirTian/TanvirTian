@@ -12,7 +12,7 @@ Still learning, still experimenting, still breaking things.
 
 | Project | Merged PRs | Focus |
 |---|---:|---|
-| [ORAS](https://github.com/oras-project/oras) | 9 | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [ORAS](https://github.com/oras-project/oras) | 10 | OCI, security, concurrency, filesystem safety, CLI, CI |
 | [oras-go](https://github.com/oras-project/oras-go)| 1 | Credential handling, API correctness |
 | [Vinix](https://github.com/vlang/vinix) | 2 | AArch64/QEMU, musl/Linux |
 | [go-criu](https://github.com/checkpoint-restore/go-criu) | 1 | Documentation / code quality |
@@ -27,7 +27,8 @@ Still learning, still experimenting, still breaking things.
 | [#2222](https://github.com/oras-project/oras/pull/2222) | 🔴 HIGH | Limit manifest config fetch size | Security / resource exhaustion |
 | [#2218](https://github.com/oras-project/oras/pull/2218) | 🔴 HIGH | Detect credentials in multiple JSON values | Security / credential redaction |
 | [#2194](https://github.com/oras-project/oras/pull/2194) | 🔴 HIGH | Clean up partial pull output on failure | Filesystem safety |
-| [#2190](https://github.com/oras-project/oras/issues/2190) | 🔴 HIGH | `pull` leaves corrupted files after digest failure | Filesystem safety *(issue report)* |
+| [#2190](https://github.com/oras-project/oras/issues/2190) | 🔴 HIGH | `pull` leaves corrupted files after digest failure | Filesystem safety *(issue report)*|
+| [#2225](https://github.com/oras-project/oras/pull/2225)        | 🟡 MEDIUM     | Restore `--output - --pretty` with bounded buffering | CLI / compatibility|
 | [#2183](https://github.com/oras-project/oras/pull/2183) | 🟡 MEDIUM | Fix concurrency in `Tagged` | Go concurrency |
 | [#2177](https://github.com/oras-project/oras/pull/2177) | 🟡 MEDIUM | Only infer platform from OCI image configs | OCI semantics |
 | [#1482](https://github.com/oras-project/oras-go/pull/1482) | 🟡 MEDIUM | Make credential lookup case-insensitive | API correctness |
@@ -57,6 +58,14 @@ I reported and reproduced a case where `oras pull` correctly detected a digest m
 ---
 
 ## 🟡 MEDIUM-impact fixes
+
+### [#2225: Restore `--output - --pretty` with bounded buffering](https://github.com/oras-project/oras/pull/2225)
+
+The security fix in #2222 rejected `oras manifest fetch-config --output - --pretty`, even though the combination was previously supported. The issue was that pretty-printing requires the config to be buffered in memory.
+
+I restored the previous behavior by routing the `--output - --pretty` case through the existing size-limited fetch path instead of the streaming path. Configs larger than the 4 MiB limit are still rejected, while `--output -` without `--pretty` continues to stream directly.
+
+Added command-level regression coverage for pretty output and an oversized-config test proving that the 4 MiB memory limit from #2222 remains enforced.
 
 ### [#2183: Fix concurrency in `Tagged`](https://github.com/oras-project/oras/pull/2183)
 `Tagged.Tags()` sorted its internal slice while holding only a read lock and returned the internal slice directly. That meant a data race under concurrent access, and callers could also mutate shared state. The fix sorts under an exclusive lock and returns a cloned slice. Verified with concurrent-access tests, slice-isolation tests, and the Go race detector.
