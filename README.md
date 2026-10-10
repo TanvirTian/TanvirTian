@@ -13,10 +13,10 @@ Still learning, still experimenting, still breaking things.
 | Project | Merged PRs | Focus |
 |---|---:|---|
 | [ORAS](https://github.com/oras-project/oras) | 12 | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [oras-go](https://github.com/oras-project/oras-go)| 1 | Credential handling, API correctness |
+| [ORAS-GO](https://github.com/oras-project/oras-go)| 1 | Credential handling, API correctness |
+|[Docker CLI](https://github.com/docker/cli)| 1 | Build system, error handling|
 | [Vinix](https://github.com/vlang/vinix) | 2 | AArch64/QEMU, musl/Linux |
 | [go-criu](https://github.com/checkpoint-restore/go-criu) | 1 | Documentation / code quality |
-
 
 ---
 
@@ -32,6 +32,7 @@ Still learning, still experimenting, still breaking things.
 | [#2183](https://github.com/oras-project/oras/pull/2183) | 🟡 MEDIUM | Fix concurrency in `Tagged` | Go concurrency |
 | [#2177](https://github.com/oras-project/oras/pull/2177) | 🟡 MEDIUM | Only infer platform from OCI image configs | OCI semantics |
 | [#1482](https://github.com/oras-project/oras-go/pull/1482) | 🟡 MEDIUM | Make credential lookup case-insensitive | API correctness |
+| [#7373](https://github.com/docker/cli/pull/7373) | 🟢 LOW | Return remote context download errors | Build / error handling 
 | [#2230](https://github.com/oras-project/oras/pull/2230) | 🟢 LOW | Validate empty OCI layout path with digest | CLI correctness |
 | [#2203](https://github.com/oras-project/oras/pull/2203) | 🟢 LOW | Correct manifest fetch format error | CLI correctness |
 | [#2214](https://github.com/oras-project/oras/pull/2214) | 🟢 LOW | Fix coverage report generation | Dev tooling |
@@ -80,11 +81,12 @@ Credential lookup failed whenever hostname casing differed between storing and r
 ---
 
 ## 🟢 LOW-impact / maintenance
-- **[#2230](https://github.com/oras-project/oras/pull/2230)**: Fixed an empty-path error when oras pull --oci-layout uses a digest reference without a file path. Added regression tests for empty paths with digest references.
-- **[#2205](https://github.com/oras-project/oras/pull/2205)**:Fixed inconsistent --format validation by checking whether a format is supported before applying format-specific handling. This prevents misleading errors from oras discover --format text and an unnecessary deprecation warning from oras repo tags --format
-- **[#2203](https://github.com/oras-project/oras/pull/2203)**: `manifest fetch` reported the wrong `--format` value in an error message (it used `opts.Template` instead of `opts.FormatFlag`). Fixed the error path and added regression coverage.
-- **[#2214](https://github.com/oras-project/oras/pull/2214)**: `make covhtml` tried to open a coverage report that was never generated. Fixed the target to generate it first.
-- **[#2207](https://github.com/oras-project/oras/pull/2207)**: Routine dependency bump for `golang.org/x/crypto`.
-- **[#2199](https://github.com/oras-project/oras/pull/2199)**: Replaced the unmaintained `canonical/action-publish` GitHub Action with direct Snapcraft CLI usage in the Snap release workflow, preserving credentials and release-channel behavior.
+- **[Docker-Cli #7373](https://github.com/docker/cli/pull/7373)**: Fixed docker build to show the correct error when downloading a remote build context fails. Added a test to make sure the error is shown and the build does not continue.
+- **[ORAS #2230](https://github.com/oras-project/oras/pull/2230)**: Fixed an empty-path error when oras pull --oci-layout uses a digest reference without a file path. Added regression tests for empty paths with digest references.
+- **[ORAS #2205](https://github.com/oras-project/oras/pull/2205)**:Fixed inconsistent --format validation by checking whether a format is supported before applying format-specific handling. This prevents misleading errors from oras discover --format text and an unnecessary deprecation warning from oras repo tags --format
+- **[ORAS #2203](https://github.com/oras-project/oras/pull/2203)**: `manifest fetch` reported the wrong `--format` value in an error message (it used `opts.Template` instead of `opts.FormatFlag`). Fixed the error path and added regression coverage.
+- **[ORAS #2214](https://github.com/oras-project/oras/pull/2214)**: `make covhtml` tried to open a coverage report that was never generated. Fixed the target to generate it first.
+- **[ORAS #2207](https://github.com/oras-project/oras/pull/2207)**: Routine dependency bump for `golang.org/x/crypto`.
+- **[ORAS #2199](https://github.com/oras-project/oras/pull/2199)**: Replaced the unmaintained `canonical/action-publish` GitHub Action with direct Snapcraft CLI usage in the Snap release workflow, preserving credentials and release-channel behavior.
 - **[Vinix #223](https://github.com/vlang/vinix/pull/223)**: Fixed a missing `Xs` template in an AArch64 QEMU `mktemp` call.
 - **[Vinix #221](https://github.com/vlang/vinix/pull/221)**: Disabled backtrace support for the musl desktop build where it didn't apply.
