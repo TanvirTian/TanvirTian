@@ -8,15 +8,15 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 Still learning, still experimenting, still breaking things.
 
-# Open Source Contributions
+## Open-Source Contributions
 
-| Project | Merged PRs | Focus |
-|---|---:|---|
-| [ORAS](https://github.com/oras-project/oras) | 12 | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [ORAS-GO](https://github.com/oras-project/oras-go)| 1 | Credential handling, API correctness |
-|[Docker CLI](https://github.com/docker/cli)| 1 | Build system, error handling|
-| [Vinix](https://github.com/vlang/vinix) | 2 | AArch64/QEMU, musl/Linux |
-| [go-criu](https://github.com/checkpoint-restore/go-criu) | 1 | Documentation / code quality |
+| Project | ⭐ Stars | Merged PRs | Focus Areas |
+|---|---|---:|---|
+| [ORAS](https://github.com/oras-project/oras) | ![Stars](https://img.shields.io/github/stars/oras-project/oras?style=flat-square) | 12 | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [ORAS-Go](https://github.com/oras-project/oras-go) | ![Stars](https://img.shields.io/github/stars/oras-project/oras-go?style=flat-square) | 2 | API correctness, compatibility, credentials |
+| [Docker CLI](https://github.com/docker/cli) | ![Stars](https://img.shields.io/github/stars/docker/cli?style=flat-square) | 1 | Build system, error handling |
+| [Vinix](https://github.com/vlang/vinix) | ![Stars](https://img.shields.io/github/stars/vlang/vinix?style=flat-square) | 2 | AArch64, QEMU, Linux |
+| [go-criu](https://github.com/checkpoint-restore/go-criu) | ![Stars](https://img.shields.io/github/stars/checkpoint-restore/go-criu?style=flat-square) | 1 | Documentation, code quality |
 
 ---
 
@@ -28,6 +28,7 @@ Still learning, still experimenting, still breaking things.
 | [#2218](https://github.com/oras-project/oras/pull/2218) | 🔴 HIGH | Detect credentials in multiple JSON values | Security / credential redaction |
 | [#2194](https://github.com/oras-project/oras/pull/2194) | 🔴 HIGH | Clean up partial pull output on failure | Filesystem safety |
 | [#2190](https://github.com/oras-project/oras/issues/2190) | 🔴 HIGH | `pull` leaves corrupted files after digest failure | Filesystem safety *(issue report)*|
+| [#1555](https://github.com/oras-project/oras-go/pull/1555) | 🟡 MEDIUM | Migrate directory annotation keys with legacy compatibility | File store / backward compatibility |
 | [#2225](https://github.com/oras-project/oras/pull/2225)        | 🟡 MEDIUM     | Restore `--output - --pretty` with bounded buffering | CLI / compatibility|
 | [#2183](https://github.com/oras-project/oras/pull/2183) | 🟡 MEDIUM | Fix concurrency in `Tagged` | Go concurrency |
 | [#2177](https://github.com/oras-project/oras/pull/2177) | 🟡 MEDIUM | Only infer platform from OCI image configs | OCI semantics |
@@ -45,23 +46,27 @@ Still learning, still experimenting, still breaking things.
 ---
 ## 🔴 HIGH-impact fixes
 
-### [#2222: Limit manifest config fetch size](https://github.com/oras-project/oras/pull/2222)
+### [ORAS #2222: Limit manifest config fetch size](https://github.com/oras-project/oras/pull/2222)
 `oras manifest fetch-config` used to buffer an entire config blob in memory with no size cap. I reproduced this against a local registry serving a 1 GiB+ crafted blob: RSS ballooned to around 2 GiB before the fetch even reached digest verification, which made it a remotely triggerable, unauthenticated DoS. The fix adds a 4 MiB limit and rejects oversized configs before downloading them. The PR went through several review rounds (10 commits, plus a Codecov coverage fix), and I proactively added validation to reject `--pretty` combined with `--output -`. Two smaller output-handling edge cases (special file paths and file permission mode) surfaced after merge and are being tracked in follow-up issues/PRs.
 
-### [#2218: Detect credentials in multiple JSON values](https://github.com/oras-project/oras/pull/2218)
+### [ORAS #2218: Detect credentials in multiple JSON values](https://github.com/oras-project/oras/pull/2218)
 Credential redaction in debug tracing stopped scanning after the first JSON value, so credentials appearing later in a response could leak into debug output. I fixed the detection logic to keep scanning across every JSON value, and added regression tests covering credentials that appear after the first value.
 
-### [#2194: Clean up partial pull output on failure](https://github.com/oras-project/oras/pull/2194)
+### [ORAS #2194: Clean up partial pull output on failure](https://github.com/oras-project/oras/pull/2194)
 A failed multi-platform `oras pull` could leave partially written files behind after an output-path collision. Since manifests are pulled concurrently, which file survived depended on timing. I implemented `pullCleanup`, which tracks output paths before writing, distinguishes pre-existing files from ones created by the current run, and removes only what the failed operation created (never pre-existing files). The maintainer review asked for two changes, cleaning up newly created parent dirs and routing cleanup warnings through the logger, and both were implemented. Coverage includes cleanup/path-tracking/duplicate-file tests plus a CLI-level reproduction against a local registry.
 
-### [#2190: `pull` leaves corrupted files after digest failure](https://github.com/oras-project/oras/issues/2190) *(issue report, not a PR)*
+### [ORAS #2190: `pull` leaves corrupted files after digest failure](https://github.com/oras-project/oras/issues/2190) *(issue report, not a PR)*
 I reported and reproduced a case where `oras pull` correctly detected a digest mismatch but left the corrupted blob on disk. To isolate it, I built a deterministic repro using a local HTTP proxy that corrupted blob responses in transit, which pinned the bug to the failed-verification path rather than the artifact itself. Fixed upstream. It's the same underlying class of bug as #2194: failed operations should not leave partial state behind.
 
 ---
 
 ## 🟡 MEDIUM-impact fixes
 
-### [#2225: Restore `--output - --pretty` with bounded buffering](https://github.com/oras-project/oras/pull/2225)
+### [ORAS-GO #1555: Migrate directory annotation keys](https://github.com/oras-project/oras-go/pull/1555)
+
+Migrated directory annotation keys to the new namespace while keeping older artifacts compatible. Added validation to catch conflicting annotations that could cause v2 and v3 to handle the same artifact differently. Updated the migration docs and added tests for edge cases.
+
+### [ORAS #2225: Restore `--output - --pretty` with bounded buffering](https://github.com/oras-project/oras/pull/2225)
 
 The security fix in #2222 rejected `oras manifest fetch-config --output - --pretty`, even though the combination was previously supported. The issue was that pretty-printing requires the config to be buffered in memory.
 
@@ -69,13 +74,13 @@ I restored the previous behavior by routing the `--output - --pretty` case throu
 
 Added command-level regression coverage for pretty output and an oversized-config test proving that the 4 MiB memory limit from #2222 remains enforced.
 
-### [#2183: Fix concurrency in `Tagged`](https://github.com/oras-project/oras/pull/2183)
+### [ORAS #2183: Fix concurrency in `Tagged`](https://github.com/oras-project/oras/pull/2183)
 `Tagged.Tags()` sorted its internal slice while holding only a read lock and returned the internal slice directly. That meant a data race under concurrent access, and callers could also mutate shared state. The fix sorts under an exclusive lock and returns a cloned slice. Verified with concurrent-access tests, slice-isolation tests, and the Go race detector.
 
-### [#2177: Only infer platform from OCI image configs](https://github.com/oras-project/oras/pull/2177)
+### [ORAS #2177: Only infer platform from OCI image configs](https://github.com/oras-project/oras/pull/2177)
 ORAS inferred platform metadata from any config blob whose JSON happened to contain `os`/`architecture` fields, regardless of the actual media type. So non-image artifacts with similarly shaped config could end up with incorrect platform metadata. I restricted inference to configs with media type `application/vnd.oci.image.config.v1+json`. Reproduced with a non-image artifact and added regression tests for both valid and invalid config types.
 
-### [#1482 (oras-go): Make credential lookup case-insensitive](https://github.com/oras-project/oras-go/pull/1482)
+### [ORAS-GO #1482: Make credential lookup case-insensitive](https://github.com/oras-project/oras-go/pull/1482)
 Credential lookup failed whenever hostname casing differed between storing and retrieving (`localhost:5020` vs `LOCALHOST:5020`). I made credential-address matching case-insensitive across all the relevant API functions, while preserving path case-sensitivity and giving exact matches precedence. Verified with targeted and full-suite tests, the race detector, and an independent reproduction through the public Go API.
 
 ---
