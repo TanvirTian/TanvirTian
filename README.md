@@ -35,6 +35,7 @@ Still learning, still experimenting, still breaking things.
 | [#1482](https://github.com/oras-project/oras-go/pull/1482) | 🟡 MEDIUM | Make credential lookup case-insensitive | API correctness |
 | [#7373](https://github.com/docker/cli/pull/7373) | 🟢 LOW | Return remote context download errors | Build / error handling 
 | [#2230](https://github.com/oras-project/oras/pull/2230) | 🟢 LOW | Validate empty OCI layout path with digest | CLI correctness |
+| [#2205](https://github.com/oras-project/oras/pull/2205) | 🟢 LOW | Validate format before format-specific handling | CLI correctness |
 | [#2203](https://github.com/oras-project/oras/pull/2203) | 🟢 LOW | Correct manifest fetch format error | CLI correctness |
 | [#2214](https://github.com/oras-project/oras/pull/2214) | 🟢 LOW | Fix coverage report generation | Dev tooling |
 | [#2207](https://github.com/oras-project/oras/pull/2207) | 🟢 LOW | Update `golang.org/x/crypto` | Dependency maintenance |
