@@ -6,9 +6,12 @@ Software engineer
 
 <br>
 
-[![CNCF Contributor](https://img.shields.io/badge/CNCF-Contributor-0086FF?style=for-the-badge&logo=cncf&logoColor=white)](https://contribcard.cncf.io/TanvirTian)
+<a href="https://contribcard.cncf.io/TanvirTian" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/CNCF-Contributor-0086FF?style=for-the-badge&logo=cncf&logoColor=white" alt="CNCF Contributor">
+</a>
 
 <br>
+
 Go · Python · Docker · PostgreSQL · Redis · Linux
 
 </div>
