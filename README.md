@@ -22,7 +22,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | ![](https://img.shields.io/github/stars/oras-project/oras?style=flat-square) | **12** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS**](https://github.com/oras-project/oras) | ![](https://img.shields.io/github/stars/oras-project/oras?style=flat-square) | **13** | OCI, security, concurrency, filesystem safety, CLI, CI |
 | [**ORAS-Go**](https://github.com/oras-project/oras-go) | ![](https://img.shields.io/github/stars/oras-project/oras-go?style=flat-square) | **2** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) | ![](https://img.shields.io/github/stars/docker/cli?style=flat-square) | **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) | ![](https://img.shields.io/github/stars/vlang/vinix?style=flat-square) | **2** | AArch64, QEMU, Linux |
@@ -149,7 +149,7 @@ Credential lookup failed when hostname casing differed between storing and retri
 ---
 
 ## Maintenance
-
+- **[ORAS #2234](https://github.com/oras-project/oras/pull/2234)**: Updated `oras.land/oras-go/v2` from `v2.6.2` to `v2.6.3` and `golang.org/x/sync` to `v0.24.0`. Resolved dependency conflicts with upstream `main` while preserving newer dependency versions.
 - **[Docker CLI #7373](https://github.com/docker/cli/pull/7373)**: Fixed `docker build` to show the correct error when downloading a remote build context fails. Added a test to make sure the error is shown and the build does not continue.
 - **[ORAS #2230](https://github.com/oras-project/oras/pull/2230)**: Fixed an empty-path error when `oras pull --oci-layout` uses a digest reference without a file path. Added regression tests for empty paths with digest references.
 - **[ORAS #2205](https://github.com/oras-project/oras/pull/2205)**: Fixed inconsistent `--format` validation by checking whether a format is supported before applying format-specific handling. This prevents misleading errors from `oras discover --format text` and an unnecessary deprecation warning from `oras repo tags --format`.
