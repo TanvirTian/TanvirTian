@@ -27,6 +27,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 | [**Docker CLI**](https://github.com/docker/cli) | ![](https://img.shields.io/github/stars/docker/cli?style=flat-square) | **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) | ![](https://img.shields.io/github/stars/vlang/vinix?style=flat-square) | **2** | AArch64, QEMU, Linux |
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | ![](https://img.shields.io/github/stars/checkpoint-restore/go-criu?style=flat-square) | **1** | Documentation, code quality |
+| [**Moby**](https://github.com/moby/moby) | ![](https://img.shields.io/github/stars/moby/moby?style=flat-square) | **1** | Documentation Fix|
 
 ---
 
@@ -262,6 +263,15 @@ Disabled backtrace support for the musl desktop build where it did not apply.
 <br>
 
 Corrected typos and grammatical issues in the project documentation.
+
+</details>
+
+<details>
+<summary><b>Moby <a href="https://github.com/moby/moby/pull/53964">#53964</a></b> . Fix CNM diagram link</summary>
+
+<br>
+
+Fixed the broken Container Network Model (CNM) diagram link in the libnetwork design documentation
 
 </details>
 
