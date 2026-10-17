@@ -22,14 +22,15 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | ![](https://img.shields.io/github/stars/oras-project/oras?style=flat-square) | **14** | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [**ORAS-Go**](https://github.com/oras-project/oras-go) | ![](https://img.shields.io/github/stars/oras-project/oras-go?style=flat-square) | **2** | API correctness, compatibility, credentials |
-| [**Docker CLI**](https://github.com/docker/cli) | ![](https://img.shields.io/github/stars/docker/cli?style=flat-square) | **1** | Build system, error handling |
-| [**Vinix**](https://github.com/vlang/vinix) | ![](https://img.shields.io/github/stars/vlang/vinix?style=flat-square) | **2** | AArch64, QEMU, Linux |
-| [**go-criu**](https://github.com/checkpoint-restore/go-criu) | ![](https://img.shields.io/github/stars/checkpoint-restore/go-criu?style=flat-square) | **1** | Documentation, code quality |
-| [**Moby**](https://github.com/moby/moby) | ![](https://img.shields.io/github/stars/moby/moby?style=flat-square) | **1** | Documentation Fix|
-
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **17** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **294**| **3** | API correctness, compatibility, credentials |
+| [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
+| [**Vinix**](https://github.com/vlang/vinix) |**2.6k**| **2** | AArch64, QEMU, Linux |
+| [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **252** | **1** | Documentation, code quality |
+| [**Moby**](https://github.com/moby/moby) | **72k** | **1** | Documentation Fix|
 ---
+
+**Want to see more?** Check out [all my merged pull requests](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Atanvirtian).
 
 ## Security, Reliability & Data Integrity
 
@@ -258,7 +259,7 @@ Disabled backtrace support for the musl desktop build where it did not apply.
 </details>
 
 <details>
-<summary><b>go-criu <a href="https://github.com/checkpoint-restore/go-criu/pull/278">#278</a></b> · Fix typos and grammar</summary>
+<summary><b>Go-Criu <a href="https://github.com/checkpoint-restore/go-criu/pull/278">#278</a></b> · Fix typos and grammar</summary>
 
 <br>
 
@@ -274,6 +275,8 @@ Corrected typos and grammatical issues in the project documentation.
 Fixed the broken Container Network Model (CNM) diagram link in the libnetwork design documentation
 
 </details>
+
+
 
 ---
 
