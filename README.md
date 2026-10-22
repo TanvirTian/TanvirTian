@@ -23,7 +23,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
 | [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **18** | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **294**| **3** | API correctness, compatibility, credentials |
+| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **294**| **4** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) |**2.6k**| **2** | AArch64, QEMU, Linux |
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **252** | **1** | Documentation, code quality |
@@ -169,6 +169,19 @@ ORAS inferred platform metadata from any config blob whose JSON contained `os` a
 ---
 
 ## Compatibility & Maintenance
+
+<details>
+<summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1667">#1667</a></b> · Fix authentication after HTTPS upgrades (v2 backport)</summary>
+
+<br>
+
+Authentication could fail when a registry redirected a request from HTTP to HTTPS on the same host, because the scheme change affected origin validation.
+
+**Fix:** Backported same-host HTTPS-upgrade authentication handling to the v2 branch while preserving safeguards against unsafe redirect targets.
+
+**Tests:** Added regression coverage for Basic and Bearer authentication, redirect boundaries, credential-cache behavior, and unsafe HTTPS upgrades. Verified with `go test ./...`.
+
+</details>
 
 <details>
 <summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1555">#1555</a></b> · Migrate directory annotation keys</summary>
