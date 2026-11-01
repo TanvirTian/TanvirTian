@@ -22,7 +22,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **18** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **20** | OCI, security, concurrency, filesystem safety, CLI, CI |
 | [**ORAS-Go**](https://github.com/oras-project/oras-go) | **294**| **4** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) |**2.6k**| **2** | AArch64, QEMU, Linux |
@@ -95,6 +95,32 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 ---
 
 ## CLI Correctness & Developer Experience
+
+<details>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2304">#2304</a></b> · Require digest references for blob commands</summary>
+
+<br>
+
+`oras blob fetch` could return an entire manifest instead of a blob, while `oras blob delete` could accidentally delete a manifest when given a tag in an OCI image layout.
+
+**Fix:** Made both commands reject tags when a digest is required, with a clear error message to guide users.
+
+**Tests:** Added unit and end-to-end tests to prevent this issue from happening again.
+
+</details>
+
+<details>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2293">#2293</a></b> · Improve display handler tests</summary>
+
+<br>
+
+Improved command tests to verify that the correct display handler functions are called, rather than checking terminal output.
+
+**Fix:** Added shared test helpers to record handler calls and check their order.
+
+**Tests:** Updated tests across multiple commands to use these helpers, making them easier to read and maintain.
+
+</details>
 
 <details>
 <summary><b>Docker CLI <a href="https://github.com/docker/cli/pull/7373">#7373</a></b> · Handle remote build context download failures</summary>
