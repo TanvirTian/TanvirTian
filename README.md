@@ -14,6 +14,8 @@ Software engineer
 
 Go · Python · Docker · PostgreSQL · Redis · Linux
 
+<img src="koi/koi.gif" width="256" alt="GitHub contribution koi">
+
 </div>
 
 ---
