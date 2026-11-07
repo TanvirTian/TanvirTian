@@ -30,6 +30,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 | [**Vinix**](https://github.com/vlang/vinix) |**2.6k**| **2** | AArch64, QEMU, Linux |
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **252** | **1** | Documentation, code quality |
 | [**Moby**](https://github.com/moby/moby) | **72k** | **1** | Documentation Fix|
+| [**pip**](https://github.com/pypa/pip) | **10.3k**| **1** | CLI correctness, argument validation, testing |
 ---
 
 **Want to see more?** Check out [all my merged pull requests](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Atanvirtian).
@@ -97,6 +98,19 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 ---
 
 ## CLI Correctness & Developer Experience
+
+<details>
+<summary><b>PIP <a href="https://github.com/pypa/pip/pull/14391">#14391</a></b> · Reject unexpected positional arguments</summary>
+
+<br>
+
+Several pip commands silently ignored extra positional arguments, which could make users think their input had been accepted.
+
+**Fix:** Made `pip check`, `pip completion`, `pip debug`, `pip freeze`, `pip inspect`, and `pip list` reject unexpected arguments with a clear error message.
+
+**Tests:** Added regression coverage to verify that all six commands report the error instead of silently continuing.
+
+</details>
 
 <details>
 <summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2304">#2304</a></b> · Require digest references for blob commands</summary>
