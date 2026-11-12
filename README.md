@@ -25,10 +25,10 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
 | [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **20** | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **294**| **4** | API correctness, compatibility, credentials |
+| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **299**| **4** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
-| [**Vinix**](https://github.com/vlang/vinix) |**2.6k**| **2** | AArch64, QEMU, Linux |
-| [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **252** | **1** | Documentation, code quality |
+| [**Vinix**](https://github.com/vlang/vinix) |**2.7k**| **2** | AArch64, QEMU, Linux |
+| [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **257** | **1** | Documentation, code quality |
 | [**Moby**](https://github.com/moby/moby) | **72k** | **1** | Documentation Fix|
 | [**pip**](https://github.com/pypa/pip) | **10.3k**| **1** | CLI correctness, argument validation, testing |
 ---
