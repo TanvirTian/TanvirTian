@@ -24,7 +24,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **20** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **21** | OCI, security, concurrency, filesystem safety, CLI, CI |
 | [**ORAS-Go**](https://github.com/oras-project/oras-go) | **299**| **4** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) |**2.7k**| **2** | AArch64, QEMU, Linux |
@@ -98,6 +98,18 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 ---
 
 ## CLI Correctness & Developer Experience
+
+<details>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2239">#2239</a></b> · Stop automatic release branch creation</summary>
+
+<br>
+
+The release script automatically created and pushed `release-X.Y` branches when tagging new minor releases, even when no backport was needed.
+
+**Fix:** Removed automatic branch creation. Maintenance branches can now be created manually when needed for backports.
+
+</details>
+
 
 <details>
 <summary><b>PIP <a href="https://github.com/pypa/pip/pull/14391">#14391</a></b> · Reject unexpected positional arguments</summary>
