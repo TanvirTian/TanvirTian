@@ -24,7 +24,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **21** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **22** | OCI, security, concurrency, filesystem safety, CLI, CI |
 | [**ORAS-Go**](https://github.com/oras-project/oras-go) | **301**| **4** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) |**2.7k**| **2** | AArch64, QEMU, Linux |
@@ -99,6 +99,19 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 ---
 
 ## CLI Correctness & Developer Experience
+
+<details>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2353">#2353</a></b> · Fix repository tag filtering in OCI layouts</summary>
+
+<br>
+
+`oras repo tags --oci-layout-path` could show tags from other repositories when given a tagged reference. It also failed to find existing manifests when given a repository-scoped digest.
+
+**Fix:** Filter tags by repository for both tagged and digest references.
+
+**Tests:** Added unit and end-to-end tests for tagged references, digest references, and tag filtering.
+
+</details>
 
 <details>
 <summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2239">#2239</a></b> · Stop automatic release branch creation</summary>
