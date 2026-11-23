@@ -31,6 +31,7 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **257** | **1** | Documentation, code quality |
 | [**Moby**](https://github.com/moby/moby) | **72.3k** | **1** | Documentation Fix|
 | [**pip**](https://github.com/pypa/pip) | **10.3k**| **1** | CLI correctness, argument validation, testing |
+| [**gVisor**](https://github.com/google/gvisor) | **19.5k** | **1** | Documentation |
 ---
 
 **Want to see more?** Check out [all my merged pull requests](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Atanvirtian).
