@@ -24,8 +24,8 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **22** | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **301**| **4** | API correctness, compatibility, credentials |
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **23** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **301**| **6** | API correctness, compatibility, credentials |
 | [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
 | [**Vinix**](https://github.com/vlang/vinix) |**2.7k**| **2** | AArch64, QEMU, Linux |
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **257** | **1** | Documentation, code quality |
@@ -99,6 +99,19 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 ---
 
 ## CLI Correctness & Developer Experience
+
+<details>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2328">#2328</a></b> · Validate OCI layout tags</summary>
+
+<br>
+
+Invalid bare tags could be accepted when pushing artifacts to OCI layouts.
+
+**Fix:** Validate bare tags for `--oci-layout` and preserve raw reference names for `--oci-layout-path`.
+
+**Tests:** Added regression coverage for invalid tags, registry ports, uppercase references, and `@` in OCI layout reference names.
+
+</details>
 
 <details>
 <summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2353">#2353</a></b> · Fix repository tag filtering in OCI layouts</summary>
