@@ -24,14 +24,15 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 | Project | Repo stars | Merged PRs | Focus |
 |---|:-:|:-:|---|
-| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **23** | OCI, security, concurrency, filesystem safety, CLI, CI |
-| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **301**| **6** | API correctness, compatibility, credentials |
-| [**Docker CLI**](https://github.com/docker/cli) |**6.1k**| **1** | Build system, error handling |
-| [**Vinix**](https://github.com/vlang/vinix) |**2.7k**| **2** | AArch64, QEMU, Linux |
+| [**ORAS**](https://github.com/oras-project/oras) | **2.5k** | **24** | OCI, security, concurrency, filesystem safety, CLI, CI |
+| [**ORAS-Go**](https://github.com/oras-project/oras-go) | **301** | **6** | API correctness, compatibility, credentials |
+| [**Docker CLI**](https://github.com/docker/cli) | **6.1k** | **1** | Build system, error handling |
+| [**Vinix**](https://github.com/vlang/vinix) | **2.7k** | **2** | AArch64, QEMU, Linux |
 | [**go-criu**](https://github.com/checkpoint-restore/go-criu) | **257** | **1** | Documentation, code quality |
-| [**Moby**](https://github.com/moby/moby) | **72.3k** | **1** | Documentation Fix|
-| [**pip**](https://github.com/pypa/pip) | **10.3k**| **1** | CLI correctness, argument validation, testing |
+| [**Moby**](https://github.com/moby/moby) | **72.3k** | **1** | Documentation |
+| [**pip**](https://github.com/pypa/pip) | **10.3k** | **1** | CLI correctness, argument validation, testing |
 | [**gVisor**](https://github.com/google/gvisor) | **20.1k** | **1** | Documentation |
+
 ---
 
 **Want to see more?** Check out [all my merged pull requests](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Atanvirtian).
@@ -43,11 +44,11 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 <br>
 
-`oras manifest fetch-config` buffered the entire config blob in memory with no size cap. A malicious or compromised registry could serve an arbitrarily large blob and exhaust client memory. In my repro against a local registry, a 1 GiB+ crafted blob pushed RSS to about 2 GiB before digest verification was even reached.
+`oras manifest fetch-config` buffered the entire config blob in memory without a size limit. A malicious registry could serve an arbitrarily large blob and exhaust client memory.
 
 **Fix:** Enforced a 4 MiB config-size limit, rejecting oversized configs before downloading the full blob.
 
-**Follow-up:** The first version also rejected `--output - --pretty`, which had worked before. I restored it in [#2225](https://github.com/oras-project/oras/pull/2225) with bounded buffering.
+**Follow-up:** Restored `--output - --pretty` support with bounded buffering in [#2225](https://github.com/oras-project/oras/pull/2225).
 
 </details>
 
@@ -56,11 +57,11 @@ Go · Python · Docker · PostgreSQL · Redis · Linux
 
 <br>
 
-Credential redaction in debug tracing stopped scanning after the first JSON value, so credentials appearing later in a response could leak into debug output.
+Credential redaction stopped scanning after the first JSON value, potentially exposing credentials in later values in debug logs.
 
-**Fix:** Scan every JSON value and hide any credentials found, so they don't appear in debug logs.
+**Fix:** Scan every JSON value and redact credentials wherever they appear.
 
-**Tests:** Regression cases with credentials placed after the first value.
+**Tests:** Added regression tests for credentials appearing after the first value.
 
 </details>
 
@@ -69,20 +70,11 @@ Credential redaction in debug tracing stopped scanning after the first JSON valu
 
 <br>
 
-A failed multi-platform `oras pull` could leave partially written files behind after an output-path collision. Because manifests are pulled concurrently, which file survived depended on timing.
+A failed multi-platform `oras pull` could leave partially written files behind after an output-path collision. Concurrent pulls also made the result dependent on timing.
 
-**Fix:** `pullCleanup` tracks output paths before writing, distinguishes pre-existing files from files created by the current run, and removes only what the failed operation created. Newly created parent directories are cleaned up too, and warnings go through the logger.
+**Fix:** Track output paths, distinguish pre-existing files from newly created files, and clean up only files and directories created by the failed operation.
 
-**Tests:** Cleanup, path-tracking and duplicate-file unit tests, plus a CLI-level repro against a local registry.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/issues/2190">#2190</a></b> · <code>pull</code> leaves corrupted files after digest failure <i>(issue only)</i></summary>
-
-<br>
-
-`oras pull` correctly detected a digest mismatch but left the corrupted blob on disk. I built a deterministic repro with a local HTTP proxy that corrupts blob responses in transit, which pinned the bug to the failed-verification path rather than the artifact. Same class of bug as #2194.
+**Tests:** Added cleanup, path-tracking, and duplicate-file tests, plus a CLI-level reproduction.
 
 </details>
 
@@ -91,91 +83,15 @@ A failed multi-platform `oras pull` could leave partially written files behind a
 
 <br>
 
-`Tagged.Tags()` sorted its internal slice under only a read lock and returned that slice directly, so concurrent callers hit a data race and could mutate shared state.
+`Tagged.Tags()` modified its internal slice while holding only a read lock and returned the shared slice directly.
 
-**Fix:** Use a write lock when sorting and return a copy of the slice.
+**Fix:** Use a write lock when sorting and return a copy to prevent concurrent access and external mutation issues.
+
 </details>
 
 ---
 
 ## CLI Correctness & Developer Experience
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2328">#2328</a></b> · Validate OCI layout tags</summary>
-
-<br>
-
-Invalid bare tags could be accepted when pushing artifacts to OCI layouts.
-
-**Fix:** Validate bare tags for `--oci-layout` and preserve raw reference names for `--oci-layout-path`.
-
-**Tests:** Added regression coverage for invalid tags, registry ports, uppercase references, and `@` in OCI layout reference names.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2353">#2353</a></b> · Fix repository tag filtering in OCI layouts</summary>
-
-<br>
-
-`oras repo tags --oci-layout-path` could show tags from other repositories when given a tagged reference. It also failed to find existing manifests when given a repository-scoped digest.
-
-**Fix:** Filter tags by repository for both tagged and digest references.
-
-**Tests:** Added unit and end-to-end tests for tagged references, digest references, and tag filtering.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2239">#2239</a></b> · Stop automatic release branch creation</summary>
-
-<br>
-
-The release script automatically created and pushed `release-X.Y` branches when tagging new minor releases, even when no backport was needed.
-
-**Fix:** Removed automatic branch creation. Maintenance branches can now be created manually when needed for backports.
-
-</details>
-
-
-<details>
-<summary><b>PIP <a href="https://github.com/pypa/pip/pull/14391">#14391</a></b> · Reject unexpected positional arguments</summary>
-
-<br>
-
-Several pip commands silently ignored extra positional arguments, which could make users think their input had been accepted.
-
-**Fix:** Made `pip check`, `pip completion`, `pip debug`, `pip freeze`, `pip inspect`, and `pip list` reject unexpected arguments with a clear error message.
-
-**Tests:** Added regression coverage to verify that all six commands report the error instead of silently continuing.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2304">#2304</a></b> · Require digest references for blob commands</summary>
-
-<br>
-
-`oras blob fetch` could return an entire manifest instead of a blob, while `oras blob delete` could accidentally delete a manifest when given a tag in an OCI image layout.
-
-**Fix:** Made both commands reject tags when a digest is required, with a clear error message to guide users.
-
-**Tests:** Added unit and end-to-end tests to prevent this issue from happening again.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2293">#2293</a></b> · Improve display handler tests</summary>
-
-<br>
-
-Improved command tests to verify that the correct display handler functions are called, rather than checking terminal output.
-
-**Fix:** Added shared test helpers to record handler calls and check their order.
-
-**Tests:** Updated tests across multiple commands to use these helpers, making them easier to read and maintain.
-
-</details>
 
 <details>
 <summary><b>Docker CLI <a href="https://github.com/docker/cli/pull/7373">#7373</a></b> · Handle remote build context download failures</summary>
@@ -189,61 +105,67 @@ Fixed `docker build` to report errors when downloading a remote build context fa
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2237">#2237</a></b> · Validate extra tags in manifest commands</summary>
+<summary><b>PIP <a href="https://github.com/pypa/pip/pull/14391">#14391</a></b> · Reject unexpected positional arguments</summary>
 
 <br>
 
-Improved extra-tag validation in manifest push and index create/update commands so invalid extra tags are rejected during command pre-run validation.
+Several pip commands silently ignored extra positional arguments, which could make users think their input had been accepted.
 
-**Fix:** Validate extra tags after option parsing.
+**Fix:** Made `pip check`, `pip completion`, `pip debug`, `pip freeze`, `pip inspect`, and `pip list` reject unexpected arguments with clear errors.
 
-**Tests:** Added regression tests for invalid option parsing and extra-tag validation.
+**Tests:** Added regression coverage for all six commands.
 
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2230">#2230</a></b> · Fix empty path for digest references</summary>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2378">#2378</a></b> · Validate OCI layout tags</summary>
 
 <br>
 
-Fixed an empty-path error when `oras pull --oci-layout` uses a digest reference without a file path.
+Invalid bare tags could be accepted when pushing artifacts to OCI layouts.
 
-**Tests:** Regression tests for empty paths with digest references.
+**Fix:** Validate bare tags for `--oci-layout` while preserving raw reference names for `--oci-layout-path`.
+
+**Tests:** Added regression coverage for invalid tags, registry ports, uppercase references, and special characters.
 
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2205">#2205</a></b> · Fix format validation</summary>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2353">#2353</a></b> · Fix repository tag filtering in OCI layouts</summary>
 
 <br>
 
-Fixed inconsistent `--format` validation by checking whether a format is supported before applying format-specific handling. This prevents misleading errors from `oras discover --format text` and an unnecessary deprecation warning from `oras repo tags --format`.
+`oras repo tags --oci-layout-path` could show tags from other repositories when given a tagged reference. It also failed to find existing manifests with repository-scoped digest references.
+
+**Fix:** Filter tags by repository for both tagged and digest references.
+
+**Tests:** Added unit and end-to-end tests.
 
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2203">#2203</a></b> · Fix manifest fetch format error</summary>
+<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2304">#2304</a></b> · Require digest references for blob commands</summary>
 
 <br>
 
-`manifest fetch` reported the wrong `--format` value in an error message: it used `opts.Template` instead of `opts.FormatFlag`.
+`oras blob fetch` could return an entire manifest instead of a blob, while `oras blob delete` could accidentally delete a manifest when given a tag in an OCI image layout.
 
-**Fix:** Use the correct format flag in the error path.
+**Fix:** Require digest references for both commands and return clear errors when tags are supplied.
 
-**Tests:** Added regression coverage for combined output and format flags.
+**Tests:** Added unit and end-to-end regression tests.
 
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2177">#2177</a></b> · Only infer platform from OCI image configs</summary>
+<summary><b>ORAS <a href="PR_LINK">#PR_NUMBER</a></b> · Avoid creating OCI layouts during deletion</summary>
 
 <br>
 
-ORAS inferred platform metadata from any config blob whose JSON contained `os` and `architecture` fields, whatever its media type, so non-image artifacts could get incorrect platform metadata.
+Deleting a blob or manifest from a missing or invalid OCI layout could unexpectedly create the layout.
 
-**Fix:** Only infer platform for `application/vnd.oci.image.config.v1+json`.
+**Fix:** Validate the existing OCI layout before deletion without creating or modifying files when the layout is missing or invalid.
 
-**Tests:** Reproduced with a non-image artifact; regression tests for valid and invalid config types.
+**Tests:** Added coverage for missing remote CA files, invalid layouts, and successful blob and manifest deletion.
 
 </details>
 
@@ -252,37 +174,15 @@ ORAS inferred platform metadata from any config blob whose JSON contained `os` a
 ## Compatibility & Maintenance
 
 <details>
-<summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1667">#1667</a></b> · Fix authentication after HTTPS upgrades (v2 backport)</summary>
+<summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1667">#1667</a></b> · Fix authentication after HTTPS upgrades</summary>
 
 <br>
 
-Authentication could fail when a registry redirected a request from HTTP to HTTPS on the same host, because the scheme change affected origin validation.
+Authentication could fail when a registry redirected a request from HTTP to HTTPS on the same host because the scheme change affected origin validation.
 
-**Fix:** Backported same-host HTTPS-upgrade authentication handling to the v2 branch while preserving safeguards against unsafe redirect targets.
+**Fix:** Added same-host HTTPS-upgrade authentication handling while preserving safeguards against unsafe redirect targets.
 
-**Tests:** Added regression coverage for Basic and Bearer authentication, redirect boundaries, credential-cache behavior, and unsafe HTTPS upgrades. Verified with `go test ./...`.
-
-</details>
-
-<details>
-<summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1555">#1555</a></b> · Migrate directory annotation keys</summary>
-
-<br>
-
-Moved directory annotation keys to the new namespace while keeping older artifacts compatible. Added validation for conflicting annotations that could make v2 and v3 handle the same artifact differently, updated the migration docs, and covered the edge cases with tests.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2225">#2225</a></b> · Restore <code>--output - --pretty</code> with bounded buffering</summary>
-
-<br>
-
-Follow-up to #2222. The first fix over-restricted `oras manifest fetch-config --output - --pretty`, which pretty-printing needs buffered in memory.
-
-**Fix:** Route that combination through the existing size-limited fetch path. Configs over 4 MiB are still rejected, and `--output -` without `--pretty` still streams directly.
-
-**Tests:** Command-level coverage for pretty output, and an oversized-config test proving the limit from #2222 still holds.
+**Tests:** Added coverage for Basic and Bearer authentication, redirect boundaries, credential-cache behavior, and unsafe HTTPS upgrades.
 
 </details>
 
@@ -291,86 +191,26 @@ Follow-up to #2222. The first fix over-restricted `oras manifest fetch-config --
 
 <br>
 
-Credential lookup failed when hostname casing differed between storing and retrieving (`localhost:5020` vs `LOCALHOST:5020`).
+Credential lookup failed when hostname casing differed between storing and retrieving credentials.
 
-**Fix:** Case-insensitive address matching across the relevant API functions, with path case-sensitivity preserved and exact matches taking precedence.
+**Fix:** Added case-insensitive address matching while preserving path case-sensitivity and exact-match precedence.
 
-**Verified with:** Targeted and full-suite tests, the race detector, and an independent repro through the public Go API.
-
-</details>
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2234">#2234</a></b> · Update dependencies</summary>
-
-<br>
-
-Updated `oras.land/oras-go/v2` from `v2.6.2` to `v2.6.3` and `golang.org/x/sync` to `v0.24.0`. Resolved dependency conflicts with upstream `main` while preserving newer dependency versions.
+**Verified with:** Targeted and full-suite tests, the race detector, and an independent reproduction through the public Go API.
 
 </details>
 
 <details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2214">#2214</a></b> · Fix coverage report generation</summary>
+<summary><b>ORAS-Go <a href="https://github.com/oras-project/oras-go/pull/1555">#1555</a></b> · Migrate directory annotation keys</summary>
 
 <br>
 
-Fixed `make covhtml` trying to open a coverage report that had not been generated. Updated the target to generate the report first.
+Moved directory annotation keys to the new namespace while keeping older artifacts compatible.
+
+**Fix:** Added validation for conflicting annotations and updated migration documentation.
+
+**Tests:** Added coverage for migration and compatibility edge cases.
 
 </details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2207">#2207</a></b> · Update <code>golang.org/x/crypto</code></summary>
-
-<br>
-
-Updated the `golang.org/x/crypto` dependency.
-
-</details>
-
-<details>
-<summary><b>ORAS <a href="https://github.com/oras-project/oras/pull/2199">#2199</a></b> · Replace deprecated publishing action</summary>
-
-<br>
-
-Replaced the unmaintained `canonical/action-publish` GitHub Action with direct Snapcraft CLI usage in the Snap release workflow, preserving credentials and release-channel behavior.
-
-</details>
-
-<details>
-<summary><b>Vinix <a href="https://github.com/vlang/vinix/pull/223">#223</a></b> · Fix AArch64 QEMU temporary-file template</summary>
-
-<br>
-
-Fixed a missing `Xs` template in an AArch64 QEMU `mktemp` call.
-
-</details>
-
-<details>
-<summary><b>Vinix <a href="https://github.com/vlang/vinix/pull/221">#221</a></b> · Disable unsupported musl backtrace support</summary>
-
-<br>
-
-Disabled backtrace support for the musl desktop build where it did not apply.
-
-</details>
-
-<details>
-<summary><b>Go-Criu <a href="https://github.com/checkpoint-restore/go-criu/pull/278">#278</a></b> · Fix typos and grammar</summary>
-
-<br>
-
-Corrected typos and grammatical issues in the project documentation.
-
-</details>
-
-<details>
-<summary><b>Moby <a href="https://github.com/moby/moby/pull/53964">#53964</a></b> . Fix CNM diagram link</summary>
-
-<br>
-
-Fixed the broken Container Network Model (CNM) diagram link in the libnetwork design documentation
-
-</details>
-
-
 
 ---
 
